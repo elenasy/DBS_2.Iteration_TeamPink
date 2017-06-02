@@ -5,6 +5,12 @@ Created on Mon May 29 11:31:56 2017
 @author: Elena
 """
 
+import csv
+
+# In the first step we decided on the columns that are important for our task and decided on the attributes "text, "is_retweet", 
+# "original_author", "time", "retweet_count" and "favorite_count". As we deleted those columns directly in the csv file and 
+# imported the file into our database, no errors were shown. This shows us, that the data had no data type errors. 
+# In the second step we thought about doing 
 
 # To be able to work with the csv file, Python has to read it first.
 with open ('C:/Users/Elena/Documents/american-election-tweets.csv') as csvfile:
