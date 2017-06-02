@@ -1,0 +1,27 @@
+
+# To build Table text, I first deleted the unnecessary columns in excel and reorder the columns. I also added a column called ID_text. It’s basically the same as the row number. Then I saved that excel file as Table_text.csv.
+# Then to get to postgresql client command line, I typed in:
+
+# sudo -i -u postgres
+# psql
+
+# Then I typed in following code to creat table and import data.
+
+
+
+
+=========================
+CREATE TABLE text (
+  retweet_count  INTEGER NOT NULL DEFAULT 0, 
+  favorite_count INTEGER NOT NULL DEFAULT 0,
+  time DATE,
+  ID_text INTEGER NOT NULL DEFAULT 0,
+  CONSTRAINT text_pkey PRIMARY KEY (id_text)
+);
+
+COPY text FROM '/home/michelle/Databsesystem/Project/Table_text.csv' DELIMITER ',' CSV HEADER ENCODING 'windows-1251';
+================================
+SELECT * FROM text;
+
+
+# How the table looks like in pgAdminIII
