@@ -2,7 +2,7 @@ import psycopg2 as p
 import re
 
 def getConnection():
-    con = p.connect("dbname='election' user='postgres' password='postgres' host='localhost'")
+    con = p.connect("dbname='postgres' user='postgres' password='123' host='localhost'")
     return con
 
 # this table assumes that we are throwing away some of the columns in the original xlsx file
@@ -12,18 +12,18 @@ def createTweetsTable(con):
     cur.close()
     con.commit()
     cur = con.cursor()
-    cur.execute("CREATE TABLE hashtag ( ID_text SERIAL PRIMARY KEY, handle  VARCHAR(64) NOT NULL,  text    VARCHAR(256),  is_retweet  BOOLEAN,  time    DATE,  retweet_count  INTEGER NOT NULL DEFAULT 0,  favorite_count INTEGER NOT NULL DEFAULT 0 );")
+    cur.execute("CREATE TABLE tweets ( ID_text SERIAL PRIMARY KEY, handle  VARCHAR(64) NOT NULL,  text    VARCHAR(256),  is_retweet  BOOLEAN,  time    DATE,  retweet_count  INTEGER NOT NULL DEFAULT 0,  favorite_count INTEGER NOT NULL DEFAULT 0 );")
     cur.close()
     con.commit()
 
-# use postgresql COPY command to automatically import csv file
-# if we export the xlsx file to csv it will be well formated with predictable escape characters.
-# If we export from excel directly we have to use windows-1251 encoding
+# Use postgresql COPY command to automatically import csv file.
+# If we export the xlsx file to csv, it will be well formated with predictable escape characters.
+# If we export from excel directly, we have to use windows-1251 encoding.
 # If we export from google sheets, then it seems to be in UTF-8, which is better.
 def copyTweetsToDb(con, csvFile):
     cur = con.cursor()
-    #cur.execute("COPY hashtag FROM '"+csvFile+"' DELIMITER ',' ESCAPE '\"' CSV HEADER ENCODING 'windows-1251';")
-    cur.execute("COPY tweets(handle,text,is_retweet,time,retweet_count,favorite_count) FROM '"+csvFile+"' DELIMITER ',' ESCAPE '\"' CSV HEADER;")
+    cur.execute("COPY tweet (handle, text, is_retweet, time, retweet_count, favorite_count) FROM '"+csvFile+"' DELIMITER ',' ESCAPE '\"' CSV HEADER ENCODING 'windows-1251';")
+    #cur.execute("COPY tweets(handle,text,is_retweet,time,retweet_count,favorite_count) FROM '"+csvFile+"' DELIMITER ',' ESCAPE '\"' CSV HEADER;")
     cur.close()
     con.commit()
 
@@ -38,7 +38,7 @@ def createHashtagTable(con):
     cur.close()
     con.commit()
 
-# parse all the tweets loaded in the tweets table for hashtags, and
+# parse all the tweets loaded in the tweets table for hashtags and
 # insert the hashtags into the hashtag table.
 def extractHashtagsFromTweets(con):
     cur = con.cursor()
